@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+
+# Scrapy
+*.json
+*.csv
+*.xml
+.scrapy/
+
+# Database
+*.db
+*.sqlite3
+
+# Environment
+.env
+
+# Logs
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+postgres_data/
+
+# NOT ignore samples But keep samples directory
+!samples/
+!samples/*.json
+!samples/*.csv
+!samples/README.md
