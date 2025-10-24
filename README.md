@@ -37,19 +37,25 @@ This framework shows how to design a **resilient, auditable Scrapy system** that
 ---
 
 ## 🧩 Architecture
-```
+<p align="center">
+  <img src="docs/assets/architecture-light.png#gh-light-mode-only" alt="Scrapy architecture light"/>
+  <img src="docs/assets/architecture-dark.png#gh-dark-mode-only" alt="Scrapy architecture dark"/>
+</p>
 
-┌────────────┐      ┌────────────┐      ┌────────────┐
-│  Spider(s) │──▶─▶│  Pipelines │──▶─▶│ PostgreSQL │
-└────────────┘      └────────────┘      └────────────┘
-│                        │
-▼                        ▼
-Middleware (Retry, Throttle, Stats)
+<p align="center"><em>Scrapy → Middleware → Validation → Pipeline → PostgreSQL → Docker → Monitoring</em></p>
 
-````
-> *Scrapy → Validation → PostgreSQL → Docker → Monitoring*
+### ⚙️ Runtime Flow
 
----
+<p align="center">
+  <img src="docs/assets/system-flow-light.png#gh-light-mode-only" alt="Scrapy sequence light"/>
+  <img src="docs/assets/system-flow-dark.png#gh-dark-mode-only" alt="Scrapy sequence dark"/>
+</p>
+
+<p align="center"><em>
+  Nightly scraping sequence — scheduler triggers spider, middleware fetches data, validator cleans items, pipeline writes to PostgreSQL, and monitoring reports completion.
+</p>
+
+
 
 ## 🚀 Quick Start
 
@@ -155,6 +161,12 @@ Located in `/docs`
 | Deploy time      | < 5 min         |
 
 ---
+
+### 🧪 Example Run
+
+![Scrapy CLI Output](docs/assets/cli-output.png)
+*Sample run — 100 items scraped and stored in PostgreSQL pipeline with error tracking and completion stats.*
+
 
 ## 💼 Use Cases
 

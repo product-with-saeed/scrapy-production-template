@@ -1,0 +1,32 @@
+%%{init: {
+  "theme": "dark",
+  "themeVariables": {
+    "background": "#0F172A",
+    "primaryColor": "#3B82F6",
+    "primaryTextColor": "#F9FAFB",
+    "primaryBorderColor": "#60A5FA",
+    "lineColor": "#94A3B8",
+    "edgeLabelBackground": "#1E293B",
+    "fontSize": "14px",
+    "fontFamily": "Inter, sans-serif"
+  }
+}}%%
+sequenceDiagram
+    autonumber
+    participant CR as 🕒 Cron / Scheduler
+    participant SP as 🕷️ Scraper (Spider)
+    participant MW as 🧩 Middleware
+    participant VL as 🧮 Validator
+    participant PL as 🔁 Pipeline
+    participant DB as 🗄️ PostgreSQL
+    participant LG as 📊 Logger / Monitor
+
+    CR->>SP: Start scraping job
+    SP->>MW: Fetch URL / Request page
+    MW-->>SP: Response (HTML / JSON)
+    SP->>VL: Emit scraped item
+    VL->>PL: Validated & cleaned item
+    PL->>DB: Write record
+    DB-->>PL: ACK (success / fail)
+    PL->>LG: Send stats (count, errors)
+    LG-->>CR: Report completion summary

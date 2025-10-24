@@ -1,0 +1,34 @@
+%%{init: {
+  "theme": "base",
+  "themeVariables": {
+    "primaryColor": "#60A5FA",
+    "primaryTextColor": "#F9FAFB",
+    "primaryBorderColor": "#3B82F6",
+    "lineColor": "#94A3B8",
+    "secondaryColor": "#0F172A",
+    "tertiaryColor": "#1E293B",
+    "edgeLabelBackground": "#1E293B",
+    "background": "#0F172A",
+    "fontSize": "14px",
+    "fontFamily": "Inter, sans-serif"
+  }
+}}%%
+flowchart LR
+    A["🕷️ Spider(s)"] --> B["🧩 Middleware<br/>Retry • Throttle • User-Agent"]
+    B --> C["🧮 Item Validation<br/>Schemas • Cleaners • Processors"]
+    C --> D["🔁 Pipeline<br/>Transform • Deduplicate • Enrich"]
+    D --> E["🗄️ PostgreSQL Database"]
+    E -.-> F["📊 Monitoring & Logs"]
+    A -.-> G["🐳 Docker Runtime"]
+    B -.-> G
+    C -.-> G
+    D -.-> G
+
+    classDef default fill:#1E293B,stroke:#334155,stroke-width:1px,color:#F9FAFB;
+    classDef core fill:#3B82F6,stroke:#60A5FA,color:#ffffff;
+    classDef data fill:#2563EB,stroke:#60A5FA,color:#ffffff;
+    classDef infra fill:#059669,stroke:#34D399,color:#ffffff;
+
+    class A,B,C,D core;
+    class E data;
+    class F,G infra;

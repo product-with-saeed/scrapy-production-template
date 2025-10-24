@@ -42,6 +42,8 @@ scrapy crawl books -o output.xml
 ```
 
 ## 📊 Sample data structure (first item from hackernews):
+
+```JSON
 {
   "title": "Macro Gaussian Splats",
   "url": "https://danybittel.ch/macro.html",
@@ -52,3 +54,4 @@ scrapy crawl books -o output.xml
   "comments": "38\u00a0comments",
   "scraped_at": "2025-10-12T17:25:54.759949"
 }
+```
