@@ -37,6 +37,9 @@ Thumbs.db
 # Docker
 postgres_data/
 
+# Social Media (local marketing content only)
+social-media/
+
 # NOT ignore samples But keep samples directory
 !samples/
 !samples/*.json
