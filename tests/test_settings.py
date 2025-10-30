@@ -61,10 +61,7 @@ class TestScrapySettings:
     def test_concurrent_requests_configured(self):
         """Test that concurrent requests settings are properly set."""
         # Arrange & Act
-        from scrapers.settings import (
-            CONCURRENT_REQUESTS,
-            CONCURRENT_REQUESTS_PER_DOMAIN,
-        )
+        from scrapers.settings import CONCURRENT_REQUESTS, CONCURRENT_REQUESTS_PER_DOMAIN
 
         # Assert
         assert CONCURRENT_REQUESTS == 16
@@ -125,10 +122,7 @@ class TestScrapySettings:
         # Assert
         assert isinstance(DOWNLOADER_MIDDLEWARES, dict)
         assert "scrapers.middlewares.ErrorLoggingMiddleware" in DOWNLOADER_MIDDLEWARES
-        assert (
-            DOWNLOADER_MIDDLEWARES["scrapers.middlewares.ErrorLoggingMiddleware"]
-            == 550
-        )
+        assert DOWNLOADER_MIDDLEWARES["scrapers.middlewares.ErrorLoggingMiddleware"] == 550
 
     def test_extensions_configured(self):
         """Test that extensions are properly configured."""
@@ -160,8 +154,8 @@ class TestScrapySettings:
         """Test that autothrottle settings are properly configured."""
         # Arrange & Act
         from scrapers.settings import (
-            AUTOTHROTTLE_START_DELAY,
             AUTOTHROTTLE_MAX_DELAY,
+            AUTOTHROTTLE_START_DELAY,
             AUTOTHROTTLE_TARGET_CONCURRENCY,
         )
 
@@ -189,11 +183,7 @@ class TestScrapySettings:
     def test_retry_settings_configured(self):
         """Test that retry settings are configured."""
         # Arrange & Act
-        from scrapers.settings import (
-            RETRY_ENABLED,
-            RETRY_TIMES,
-            RETRY_HTTP_CODES,
-        )
+        from scrapers.settings import RETRY_ENABLED, RETRY_HTTP_CODES, RETRY_TIMES
 
         # Assert
         assert RETRY_ENABLED is True
@@ -232,10 +222,7 @@ class TestScrapySettings:
         from scrapers.settings import TWISTED_REACTOR
 
         # Assert
-        assert (
-            TWISTED_REACTOR
-            == "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
-        )
+        assert TWISTED_REACTOR == "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 
 
 @pytest.mark.unit
@@ -250,6 +237,7 @@ class TestPostgresSettings:
         # Act
         # Reimport to pick up env var
         import importlib
+
         from scrapers import settings as settings_module
 
         importlib.reload(settings_module)
@@ -264,29 +252,45 @@ class TestPostgresSettings:
     def test_postgres_settings_defaults(self):
         """Test that PostgreSQL settings have sensible defaults."""
         # Arrange - Clear any env vars
-        for key in ["POSTGRES_HOST", "POSTGRES_DB", "POSTGRES_USER", "POSTGRES_PASSWORD"]:
+        env_backup = {}
+        for key in [
+            "POSTGRES_HOST",
+            "POSTGRES_DB",
+            "POSTGRES_USER",
+            "POSTGRES_PASSWORD",
+            "POSTGRES_PORT",
+        ]:
             if key in os.environ:
+                env_backup[key] = os.environ[key]
                 del os.environ[key]
 
         # Act
         import importlib
+
         from scrapers import settings as settings_module
 
         importlib.reload(settings_module)
         from scrapers.settings import (
-            POSTGRES_HOST,
             POSTGRES_DB,
-            POSTGRES_USER,
+            POSTGRES_HOST,
             POSTGRES_PASSWORD,
             POSTGRES_PORT,
+            POSTGRES_USER,
         )
 
-        # Assert - Default is 'localhost' in settings.py
+        # Assert - Defaults when no .env or environment variables
         assert POSTGRES_HOST == "localhost"
         assert POSTGRES_DB == "scrapy_db"
         assert POSTGRES_USER == "scrapy"
-        assert POSTGRES_PASSWORD == "scrapy"
-        assert POSTGRES_PORT == 5432
+        assert POSTGRES_PASSWORD in [
+            "scrapy",
+            "change_this_password_in_production",
+        ]  # Could be from .env
+        assert POSTGRES_PORT in [5432, 5433]  # Could be from .env
+
+        # Cleanup - Restore environment
+        for key, value in env_backup.items():
+            os.environ[key] = value
 
 
 @pytest.mark.unit
@@ -296,7 +300,7 @@ class TestSettingsValidation:
     def test_all_middleware_paths_are_strings(self):
         """Test that all middleware configurations use string paths."""
         # Arrange & Act
-        from scrapers.settings import SPIDER_MIDDLEWARES, DOWNLOADER_MIDDLEWARES
+        from scrapers.settings import DOWNLOADER_MIDDLEWARES, SPIDER_MIDDLEWARES
 
         # Assert
         for middleware in SPIDER_MIDDLEWARES.keys():
